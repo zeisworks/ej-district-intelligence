@@ -14,20 +14,19 @@
 .tab:hover{color:rgba(255,255,255,.85);}
 .tab.active{color:var(--ej-yellow);border-bottom-color:var(--ej-yellow);font-weight:700;}
 .page{padding:1rem 1.25rem 1.5rem;background:var(--bg);}
-.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1rem;align-items:start;}
+.stack{display:flex;flex-direction:column;gap:10px;max-width:860px;margin:0 auto;}
 .map-wrap{position:relative;}
-#map{height:310px;border-radius:10px;border:2px solid var(--ej-gray);overflow:hidden;}
+#map{height:420px;border-radius:10px;border:2px solid var(--ej-gray);overflow:hidden;}
 .map-legend{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:6px;padding:7px 9px;z-index:1000;font-size:10px;color:var(--muted);line-height:1.9;}
 .lr{display:flex;align-items:center;gap:6px;}
 .ld{width:10px;height:10px;border-radius:50%;background:var(--ej-yellow);border:1px solid #D8A800;flex-shrink:0;}
 .lf{width:14px;height:10px;border-radius:2px;background:rgba(255,213,32,.25);border:2px solid var(--ej-gray);flex-shrink:0;}
 .la{width:14px;height:10px;border-radius:2px;background:transparent;border:1.5px dashed #999;flex-shrink:0;}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
 .stat{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--ej-yellow);border-radius:8px;padding:9px 11px;}
 .slabel{font-size:9px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;}
 .sval{font-size:20px;font-weight:700;color:var(--ej-gray);line-height:1;margin-bottom:1px;}
 .ssub{font-size:9px;color:var(--faint);}
-.side{display:flex;flex-direction:column;gap:9px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;}
 .ptop{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px;}
 .rphoto{width:50px;height:50px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--ej-yellow);}
@@ -39,15 +38,8 @@
 .coms{border-top:1px solid var(--border);padding-top:9px;}
 .section-label{font-size:9px;color:var(--ej-gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
 .pill{display:inline-block;font-size:10px;padding:2px 7px;background:var(--ej-cream);border:1px solid #E8D98A;border-radius:3px;margin:2px 2px 0 0;color:var(--ej-gray);}
-.brief-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;}
-.bhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:9px;border-bottom:2px solid var(--ej-yellow);}
-.btitle{font-size:12px;font-weight:700;color:var(--ej-gray);}
-.zg-label{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;}
-.tp{padding-left:11px;border-left:3px solid var(--ej-yellow);margin-bottom:11px;}
-.tph{font-size:12px;font-weight:700;color:var(--ej-gray);margin-bottom:3px;line-height:1.3;}
-.tpb{font-size:11px;color:var(--muted);line-height:1.6;}
 .mnote{font-size:9px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--border);line-height:1.5;}
-.about-note{font-size:10px;color:var(--muted);line-height:1.6;margin-top:8px;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+.about-note{font-size:10px;color:var(--muted);line-height:1.6;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
 </style>
 
 <div class="app-header">
@@ -64,37 +56,30 @@
   <button class="tab" onclick="go('johnson',this)">Mike Johnson</button>
 </div>
 <div class="page">
-  <div class="grid">
-    <div>
-      <div class="map-wrap">
-        <div id="map"></div>
-        <div class="map-legend">
-          <div class="lr"><div class="ld"></div> Edward Jones offices</div>
-          <div class="lr"><div class="lf"></div> Selected district</div>
-          <div class="lr"><div class="la"></div> Adjacent districts</div>
-        </div>
+  <div class="stack">
+    <div class="card">
+      <div class="ptop">
+        <img class="rphoto" id="rp" src="" alt=""/>
+        <div class="rini" id="ri"></div>
+        <div><div class="rname" id="rn">—</div><div class="rmeta" id="rm">—</div></div>
       </div>
-      <div class="stats">
-        <div class="stat"><div class="slabel">Edward Jones offices</div><div class="sval" id="so">—</div><div class="ssub">in district</div></div>
-        <div class="stat"><div class="slabel">Edward Jones clients</div><div class="sval" id="sc">—</div><div class="ssub">est. households</div></div>
-        <div class="stat"><div class="slabel">Edward Jones advisors</div><div class="sval" id="sa">—</div><div class="ssub">local small businesses</div></div>
-      </div>
-      <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.</div>
+      <div class="coms"><div class="section-label">Committee assignments</div><div id="rc">—</div></div>
     </div>
-    <div class="side">
-      <div class="card">
-        <div class="ptop">
-          <img class="rphoto" id="rp" src="" alt=""/>
-          <div class="rini" id="ri"></div>
-          <div><div class="rname" id="rn">—</div><div class="rmeta" id="rm">—</div></div>
-        </div>
-        <div class="coms"><div class="section-label">Committee assignments</div><div id="rc">—</div></div>
+    <div class="stats">
+      <div class="stat"><div class="slabel">Edward Jones offices</div><div class="sval" id="so">—</div><div class="ssub">in district</div></div>
+      <div class="stat"><div class="slabel">Edward Jones clients</div><div class="sval" id="sc">—</div><div class="ssub">est. households</div></div>
+      <div class="stat"><div class="slabel">Edward Jones advisors</div><div class="sval" id="sa">—</div><div class="ssub">local small businesses</div></div>
+    </div>
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div class="map-legend">
+        <div class="lr"><div class="ld"></div> Edward Jones offices</div>
+        <div class="lr"><div class="lf"></div> Selected district</div>
+        <div class="lr"><div class="la"></div> Adjacent districts</div>
       </div>
-      <div class="brief-card">
-        <div class="bhdr"><div class="btitle">Edward Jones Advocacy Brief</div><div class="zg-label">ZeisGroup · Confidential</div></div>
-        <div id="rb">—</div>
-        <div class="mnote">Stats from Edward Jones annual ZIP code data. District boundaries approximate — 119th Congress.</div>
-      </div>
+    </div>
+    <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.
+      <div class="mnote">Stats from Edward Jones annual ZIP code data. District boundaries approximate — 119th Congress.</div>
     </div>
   </div>
 </div>
@@ -153,19 +138,19 @@ const D={
   hill:{name:'French Hill',party:'R',state:'Arkansas',district:'AR-2',title:'Chair, Financial Services Committee',bio:'H001072',offices:23,clients:'6,800',advisors:26,center:[34.7,-92.5],zoom:7,
     coms:['Financial Services (Chair)','Joint Economic Committee'],
     locs:[[34.7465,-92.2896],[34.7695,-92.2670],[35.0887,-92.4421],[34.5648,-92.5846],[34.5954,-92.4899],[34.8706,-92.3948],[34.9745,-92.0162],[34.8662,-92.1210],[34.8320,-92.2201],[35.2506,-91.7368],[34.5037,-93.0552],[35.2787,-93.1338],[35.0501,-91.9529],[34.4565,-92.8019],[35.1478,-92.7294],[34.6201,-92.3446],[34.7743,-92.4618],[35.3412,-91.5543],[34.9034,-91.6723],[35.4612,-92.6290],[34.2454,-93.1299],[35.5651,-91.2015],[35.4123,-91.8765]],
-    tps:[{h:"Your committee shapes Edward Jones' operating environment",b:"As Chair of House Financial Services, Rep. Hill sets the agenda on retirement security legislation, fiduciary standards, and capital markets regulation — the three areas that matter most to Edward Jones' 9 million clients."},{h:"23 offices, 26 advisors serving AR-2 constituents",b:"Every Edward Jones office in this district is an independently-owned small business. These advisors employ local staff, pay local taxes, and serve neighbors who have no other access to professional financial guidance."},{h:"Rural Arkansas depends on Edward Jones for retirement access",b:"Many communities in AR-2 have no bank branches and no other financial advisors. Edward Jones' branch model was built for this gap — making retirement security legislation personal for Arkansas families."}]},
+  },
   bacon:{name:'Don Bacon',party:'R',state:'Nebraska',district:'NE-2',title:'Armed Services · Agriculture',bio:'B001298',offices:18,clients:'5,400',advisors:21,center:[41.3,-96.2],zoom:8,
     coms:['Armed Services','Agriculture','Select Committee on China'],
     locs:[[41.2565,-95.9345],[41.2870,-96.0123],[41.1544,-95.9086],[41.1334,-96.0306],[41.1872,-96.0779],[41.2040,-96.0284],[41.0920,-96.1481],[41.3576,-96.1573],[41.5545,-96.1513],[41.4333,-96.5008],[41.3198,-96.0106],[41.2234,-95.8756],[41.2890,-95.8456],[41.1765,-96.1890],[41.0654,-96.2343],[41.4987,-96.3456],[41.3456,-96.2123],[41.2123,-96.1456]],
-    tps:[{h:"Military families are core Edward Jones clients in NE-2",b:"With Offutt Air Force Base in the district, thousands of active-duty and veteran households rely on Edward Jones advisors for TSP rollovers, survivor benefit planning, and retirement transitions."},{h:"18 offices, 5,400 clients across Omaha metro",b:"These 21 local advisors are small business owners employing Omaha residents and reinvesting in the local economy — exactly the kind of Main Street presence that defines this district."},{h:"Retirement security is a bipartisan win in NE-2",b:"Rep. Bacon's moderate profile makes him a natural partner on SECURE Act enhancements and Social Security solvency — issues that poll well across party lines in NE-2."}]},
+  },
   pingree:{name:'Chellie Pingree',party:'D',state:'Maine',district:'ME-1',title:'Appropriations Committee',bio:'P000597',offices:12,clients:'3,900',advisors:14,center:[44.0,-70.2],zoom:7,
     coms:['Appropriations','Appropriations – Agriculture Subcommittee','House Administration'],
     locs:[[43.6615,-70.2553],[43.6432,-70.3088],[43.6770,-70.3712],[43.5784,-70.3320],[43.4926,-70.4534],[43.5009,-70.4328],[43.4390,-70.7759],[44.0978,-70.2312],[44.1003,-70.2148],[43.9145,-69.9653],[43.9112,-69.8253],[44.1037,-69.1087]],
-    tps:[{h:"Maine's aging population relies on Edward Jones",b:"ME-1 has one of the oldest median ages of any congressional district. Edward Jones' 12 offices serve nearly 3,900 households focused on retirement security — exactly the constituency Rep. Pingree represents."},{h:"Edward Jones fills the gap left by bank branch closures",b:"Rural and coastal Maine has lost dozens of bank branches over the past decade. Edward Jones' locally-owned advisor model was built for communities that large institutions have abandoned."},{h:"Small business story resonates across the aisle",b:"Each of the 14 Edward Jones advisors in ME-1 is an independent business owner — hiring local, serving local, and staying in communities that large firms don't reach."}]},
+  },
   johnson:{name:'Mike Johnson',party:'R',state:'Louisiana',district:'LA-4',title:'Speaker of the House',bio:'J000299',offices:19,clients:'4,200',advisors:22,center:[32.2,-93.0],zoom:7,
     coms:['Speaker of the House','Rules Committee (ex officio)','All committees (ex officio)'],
     locs:[[32.5252,-93.7502],[32.5154,-93.7321],[32.5160,-93.6813],[32.4654,-93.6234],[32.6087,-93.2865],[31.7607,-93.0863],[32.5232,-92.6412],[32.5112,-92.1193],[32.7765,-91.9087],[32.8820,-91.5432],[31.3068,-92.4451],[31.2532,-92.4234],[32.0765,-93.5234],[31.6234,-93.4765],[31.9876,-93.7543],[32.7123,-93.9876],[32.4234,-93.8765],[31.8765,-92.6543],[32.1234,-92.8765]],
-    tps:[{h:"19 offices, 4,200 clients across LA-4",b:"Speaker Johnson's district stretches across northwest and central Louisiana — communities where Edward Jones is often the only professional financial presence in town."},{h:"Edward Jones' mission aligns with the Speaker's values",b:"Individual financial responsibility, locally-owned small businesses, Main Street over Wall Street — Edward Jones' model reflects the same priorities the Speaker carries to the floor."},{h:"Floor time for retirement legislation starts here",b:"As Speaker, Rep. Johnson controls the House floor agenda. Edward Jones has a direct interest in SECURE 3.0 provisions receiving floor consideration. This meeting builds that case at the highest level."}]}
+  }
 };
 
 function mkGeo(rings){ return {type:'Feature',geometry:{type:'Polygon',coordinates:rings}}; }
@@ -189,7 +174,6 @@ function go(id,el){
   document.getElementById('rn').innerHTML=`${r.name}<span class="pbadge b${r.party}">${r.party==='D'?'Dem':'Rep'}</span>`;
   document.getElementById('rm').textContent=`${r.state} · ${r.district} · ${r.title}`;
   document.getElementById('rc').innerHTML=r.coms.map(c=>`<span class="pill">${c}</span>`).join('');
-  document.getElementById('rb').innerHTML=r.tps.map(t=>`<div class="tp"><div class="tph">${t.h}</div><div class="tpb">${t.b}</div></div>`).join('');
 
   if(!lmap){
     lmap=L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView(r.center,r.zoom);
