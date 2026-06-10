@@ -48,8 +48,7 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background
 .pill{display:inline-block;font-size:10px;padding:2px 7px;background:var(--ej-cream);border:1px solid #E8D98A;border-radius:3px;margin:2px 2px 0 0;color:var(--ej-gray);}
 .mnote{font-size:9px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--border);line-height:1.5;}
 .about-note{font-size:10px;color:var(--muted);line-height:1.6;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
-.leaflet-tooltip.city-label{background:#6b6b6b;color:#fff;border:none;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;}
-.leaflet-tooltip.city-label::before{display:none;}
+.city-chip{position:absolute;transform:translate(-50%,-50%);background:#6b6b6b;color:#fff;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -123,7 +122,7 @@ const D = {
        stats:[['Edward Jones offices','80','in district'],['Edward Jones clients','58,305','in district']]}
 };
 
-let lmap=null, cityLayers=[], distLayers={};
+let lmap=null, cityLayers=[], officeLayers=[], distLayers={}, currentId='0', layoutTimer=null;
 function ini(n){return n.split(' ').filter(Boolean).map(x=>x[0]).join('').substring(0,2).toUpperCase();}
 
 function buildTabs(){
@@ -179,20 +178,55 @@ function go(id,el){
   });
   lmap.fitBounds(bounds.pad(0.06));
 
-  // City labels
-  cityLayers.forEach(m=>m.remove()); cityLayers=[];
   // Office pins: selected district's offices, or all statewide on the state view
+  officeLayers.forEach(m=>m.remove()); officeLayers=[];
   const officeSets = id==='0' ? Object.values(MO_DATA.offices||{}) : [(MO_DATA.offices||{})[id]||[]];
   officeSets.forEach(set=>set.forEach(([lat,lng])=>{
     const m=L.circleMarker([lat,lng],{radius:5,fillColor:'#FFD520',color:'#D8A800',weight:1.5,opacity:1,fillOpacity:0.95})
       .bindTooltip('Edward Jones office',{permanent:false,direction:'top'}).addTo(lmap);
-    cityLayers.push(m);
+    officeLayers.push(m);
   }));
-  (MO_DATA.cities[id]||[]).forEach(([name,lat,lng])=>{
-    const label = (id==='0' && name==='Jefferson City') ? '★ '+name : name;
-    const m=L.circleMarker([lat,lng],{radius:2.5,fillColor:'#6b6b6b',color:'#fff',weight:1,opacity:1,fillOpacity:1})
-      .bindTooltip(label,{permanent:true,direction:'top',offset:[0,-4],className:'city-label'}).addTo(lmap);
-    cityLayers.push(m);
+
+  // City labels are laid out in pixel space, so wait for the view change to settle
+  currentId=id;
+  clearTimeout(layoutTimer);
+  lmap.once('moveend',renderCityLabels);
+  layoutTimer=setTimeout(renderCityLabels,400);
+}
+
+// Place each city label near its anchor, nudging outward until it overlaps
+// nothing already placed, then connect label to anchor with a leader line.
+function renderCityLabels(){
+  cityLayers.forEach(l=>l.remove()); cityLayers=[];
+  const list=MO_DATA.cities[currentId]||[]; if(!list.length||!lmap) return;
+  const size=lmap.getSize();
+  const items=list.map(([name,lat,lng])=>{
+    const label=(currentId==='0'&&name==='Jefferson City')?'★ '+name:name;
+    return {name:label,ll:L.latLng(lat,lng),p:lmap.latLngToContainerPoint([lat,lng]),w:label.length*6.2+14,h:18};
+  }).sort((a,b)=>a.p.y-b.p.y);
+  const placed=[];
+  const CAND=[[0,-20],[26,-14],[-26,-14],[30,0],[-30,0],[26,14],[-26,14],[0,22]];
+  const overlaps=(b,c)=>!(b.x2+2<c.x1||c.x2+2<b.x1||b.y2+2<c.y1||c.y2+2<b.y1);
+  items.forEach(it=>{
+    let chosen=null;
+    for(const scale of [1,1.8,2.8,4,5.5,7.5]){
+      for(const [dx,dy] of CAND){
+        const cx=it.p.x+dx*scale, cy=it.p.y+dy*scale;
+        const box={x1:cx-it.w/2,x2:cx+it.w/2,y1:cy-it.h/2,y2:cy+it.h/2};
+        const inBounds=box.x1>=2&&box.y1>=2&&box.x2<=size.x-2&&box.y2<=size.y-2;
+        if(inBounds&&!placed.some(b=>overlaps(box,b))){chosen={cx,cy,box};break;}
+      }
+      if(chosen)break;
+    }
+    if(!chosen){
+      const cx=it.p.x, cy=it.p.y-20;
+      chosen={cx,cy,box:{x1:cx-it.w/2,x2:cx+it.w/2,y1:cy-it.h/2,y2:cy+it.h/2}};
+    }
+    placed.push(chosen.box);
+    const labelLL=lmap.containerPointToLatLng([chosen.cx,chosen.cy]);
+    cityLayers.push(L.polyline([it.ll,labelLL],{color:'#8a8a8a',weight:1,opacity:.8,interactive:false}).addTo(lmap));
+    cityLayers.push(L.circleMarker(it.ll,{radius:2.5,fillColor:'#6b6b6b',color:'#fff',weight:1,opacity:1,fillOpacity:1,interactive:false}).addTo(lmap));
+    cityLayers.push(L.marker(labelLL,{icon:L.divIcon({className:'',html:`<div class="city-chip">${it.name}</div>`,iconSize:[0,0]}),interactive:false,keyboard:false}).addTo(lmap));
   });
 }
 
@@ -203,6 +237,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   MO_DATA.geo.features.forEach(f=>{
     distLayers[String(f.properties.d)]=L.geoJSON(f).addTo(lmap);
   });
+  lmap.on('zoomend',renderCityLabels);
   go('0',document.querySelector('.tab'));
 });
 </script>
