@@ -5,65 +5,101 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Edward Jones District Intelligence — Missouri</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Zilla+Slab:wght@600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{--ej-yellow:#FFD520;--ej-gray:#414042;--ej-gray-dark:#2F2F31;--ej-cream:#FBF6E3;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--bg:#f8f9fa;--text:#111827;--surface:#fff;}
-body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);}
-.app-header{background:var(--ej-gray);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:52px;border-bottom:3px solid var(--ej-yellow);}
-.logo-area{display:flex;align-items:center;gap:10px;}
-.ej-logo{height:32px;padding:0 12px;background:var(--ej-yellow);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:14px;color:var(--ej-gray-dark);flex-shrink:0;white-space:nowrap;}
-.header-title{color:#fff;font-size:13px;font-weight:600;}
-.header-sub{color:rgba(255,255,255,0.5);font-size:10px;}
-.proto-badge{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.2);border-radius:4px;}
-.tabs-bar{background:var(--ej-gray-dark);padding:0 1.25rem;display:flex;gap:2px;overflow-x:auto;}
-.tab{padding:9px 14px;font-size:12px;font-weight:500;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;color:rgba(255,255,255,.5);font-family:inherit;transition:all .12s;white-space:nowrap;}
-.tab:hover{color:rgba(255,255,255,.85);}
-.tab.active{color:var(--ej-yellow);border-bottom-color:var(--ej-yellow);font-weight:700;}
-.page{padding:1rem 1.25rem 1.5rem;background:var(--bg);}
-.stack{display:flex;flex-direction:column;gap:10px;max-width:860px;margin:0 auto;}
-.pg-title{font-size:26px;font-weight:700;color:var(--ej-gray-dark);padding-bottom:8px;border-bottom:1px solid var(--ej-gray);}
-.map-wrap{position:relative;}
-#map{height:460px;border-radius:10px;border:2px solid var(--ej-gray);overflow:hidden;}
-.map-legend{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:6px;padding:7px 9px;z-index:1000;font-size:10px;color:var(--muted);line-height:1.9;}
-.lr{display:flex;align-items:center;gap:6px;}
-.ld{width:10px;height:10px;border-radius:50%;background:var(--ej-yellow);border:1px solid #D8A800;flex-shrink:0;}
-.lf{width:14px;height:10px;border-radius:2px;background:rgba(255,213,32,.25);border:2px solid var(--ej-gray);flex-shrink:0;}
-.la{width:14px;height:10px;border-radius:2px;background:transparent;border:1.5px dashed #999;flex-shrink:0;}
-.lc{padding:0 4px;border-radius:2px;background:#6b6b6b;color:#fff;font-size:8px;flex-shrink:0;}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:7px;}
-.stat{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--ej-yellow);border-radius:8px;padding:9px 11px;}
-.slabel{font-size:9px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;}
-.sval{font-size:20px;font-weight:700;color:var(--ej-gray);line-height:1;margin-bottom:1px;}
-.ssub{font-size:9px;color:var(--faint);}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;}
-.ptop{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px;}
-.rphoto{width:50px;height:50px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--ej-yellow);}
-.rini{width:50px;height:50px;border-radius:50%;background:var(--ej-gray);border:2px solid var(--ej-yellow);display:none;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--ej-yellow);flex-shrink:0;}
-.rname{font-size:14px;font-weight:700;color:var(--ej-gray);margin-bottom:2px;line-height:1.3;}
-.rmeta{font-size:11px;color:var(--muted);line-height:1.5;}
-.pbadge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+:root{--ej-yellow:#FFD520;--ej-gray:#414042;--ej-gray-dark:#2F2F31;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--surface:#fff;}
+body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface);color:var(--ej-gray);}
+
+/* Header band, mirroring Edward Jones print/web masthead */
+.app-header{background:var(--ej-gray);display:flex;align-items:stretch;justify-content:space-between;height:56px;}
+.logo-area{display:flex;align-items:stretch;gap:14px;}
+.ej-logo{background:var(--ej-yellow);padding:0 18px;display:flex;align-items:center;white-space:nowrap;}
+.lg-serif{font-family:'Zilla Slab',Georgia,serif;font-weight:600;font-size:19px;color:#1d1d1f;}
+.lg-sans{font-family:Montserrat,Arial,sans-serif;font-weight:800;font-size:19px;color:#1d1d1f;margin-left:4px;}
+.lg-reg{font-size:8px;color:#1d1d1f;vertical-align:super;}
+.header-title-wrap{display:flex;flex-direction:column;justify-content:center;}
+.header-title{color:#fff;font-size:13px;font-weight:700;letter-spacing:.01em;}
+.header-sub{color:rgba(255,255,255,.55);font-size:10px;}
+.header-right{display:flex;align-items:center;padding:0 18px;font-size:12px;font-weight:700;color:#fff;}
+.header-right .cev{color:var(--ej-yellow);margin-right:5px;}
+.header-right .sipc{font-weight:400;color:rgba(255,255,255,.75);}
+.header-right .sep{margin:0 7px;color:rgba(255,255,255,.4);font-weight:400;}
+
+/* Nav: white bar, dark labels, yellow active underline like edwardjones.com */
+.tabs-bar{background:#fff;padding:0 1.5rem;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);}
+.tab{padding:13px 12px 10px;font-size:13px;font-weight:600;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .12s;white-space:nowrap;}
+.tab:hover{color:var(--ej-gray-dark);}
+.tab.active{color:var(--ej-gray-dark);border-bottom-color:var(--ej-yellow);font-weight:700;}
+
+.page{padding:1.5rem 1.5rem 0;}
+.stack{display:flex;flex-direction:column;gap:14px;max-width:880px;margin:0 auto;}
+
+/* Page title + right-aligned stats, as on the district report pages */
+.pg-title{font-size:34px;font-weight:700;color:var(--ej-gray-dark);padding-bottom:10px;border-bottom:1px solid var(--ej-gray);letter-spacing:-.01em;}
+.stats{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.stat-line{font-size:15px;color:var(--ej-gray);}
+.stat-line b{font-weight:800;color:var(--ej-gray-dark);}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;}
+.ptop{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px;}
+.rphoto{width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--ej-yellow);}
+.rini{width:52px;height:52px;border-radius:50%;background:var(--ej-gray);border:3px solid var(--ej-yellow);display:none;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--ej-yellow);flex-shrink:0;}
+.rname{font-size:16px;font-weight:700;color:var(--ej-gray-dark);margin-bottom:2px;line-height:1.3;}
+.rmeta{font-size:12px;color:var(--muted);line-height:1.5;}
+.pbadge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;vertical-align:middle;margin-left:6px;}
 .bD{background:#dbeafe;color:#1e40af;}.bR{background:#fee2e2;color:#b91c1c;}
-.coms{border-top:1px solid var(--border);padding-top:9px;}
-.section-label{font-size:9px;color:var(--ej-gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
-.pill{display:inline-block;font-size:10px;padding:2px 7px;background:var(--ej-cream);border:1px solid #E8D98A;border-radius:3px;margin:2px 2px 0 0;color:var(--ej-gray);}
-.mnote{font-size:9px;color:var(--faint);margin-top:9px;padding-top:9px;border-top:1px solid var(--border);line-height:1.5;}
-.about-note{font-size:10px;color:var(--muted);line-height:1.6;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
-.city-chip{position:absolute;transform:translate(-50%,-50%);background:#6b6b6b;color:#fff;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;white-space:nowrap;}
+.coms{border-top:1px solid var(--border);padding-top:10px;}
+.section-label{font-size:10px;color:var(--ej-gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;background:#fff;border:1.5px solid var(--ej-yellow);border-radius:3px;margin:2px 3px 0 0;color:var(--ej-gray-dark);}
+
+.map-wrap{position:relative;}
+#map{height:470px;border-radius:6px;border:1px solid var(--border);overflow:hidden;}
+
+/* Legend + boilerplate row, like the bottom of the report pages */
+.below-map{display:flex;gap:2rem;align-items:flex-start;padding:4px 2px 0;}
+.legend-block{flex-shrink:0;}
+.legend-title{font-size:13px;font-weight:700;color:var(--ej-gray-dark);margin-bottom:6px;}
+.lr{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ej-gray);line-height:2;}
+.ld{width:12px;height:12px;border-radius:50%;background:var(--ej-yellow);border:1px solid #D8A800;flex-shrink:0;}
+.lf{width:16px;height:11px;border-radius:2px;background:rgba(255,213,32,.25);border:2px solid var(--ej-gray);flex-shrink:0;}
+.la{width:16px;height:11px;border-radius:2px;background:transparent;border:1.5px dashed #999;flex-shrink:0;}
+.lc{padding:0 5px;border-radius:2px;background:#6b6b6b;color:#fff;font-size:9px;flex-shrink:0;}
+.about-note{font-size:12.5px;color:var(--ej-gray);line-height:1.65;}
+.mnote{font-size:10px;color:var(--faint);margin-top:10px;line-height:1.6;}
+
+/* Compliance footer band */
+.app-footer{margin-top:1.5rem;background:var(--ej-gray);color:rgba(255,255,255,.75);font-size:10px;display:flex;justify-content:space-between;gap:1rem;padding:10px 1.5rem;letter-spacing:.02em;}
+.app-footer b{color:#fff;font-weight:700;}
+
+.city-chip{position:absolute;transform:translate(-50%,-50%);background:#6b6b6b;color:#fff;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;white-space:nowrap;font-family:Montserrat,Arial,sans-serif;}
+
+@media (max-width:640px){
+  .pg-title{font-size:26px;}
+  .below-map{flex-direction:column;gap:1rem;}
+  .header-right{display:none;}
+}
 </style>
 </head>
 <body>
 
 <div class="app-header">
   <div class="logo-area">
-    <div class="ej-logo">Edward Jones</div>
-    <div><div class="header-title">District Intelligence</div><div class="header-sub">Powered by ZeisGroup</div></div>
+    <div class="ej-logo"><span class="lg-serif">Edward</span><span class="lg-sans">Jones</span><span class="lg-reg">&reg;</span></div>
+    <div class="header-title-wrap">
+      <div class="header-title">District Intelligence</div>
+      <div class="header-sub">Powered by ZeisGroup</div>
+    </div>
   </div>
-  <div class="proto-badge">Prototype</div>
+  <div class="header-right"><span class="cev">&gt;</span> edwardjones.com <span class="sep">|</span> <span class="sipc">Member SIPC</span></div>
 </div>
 <div class="tabs-bar" id="tabs"></div>
 <div class="page">
   <div class="stack">
     <div class="pg-title" id="title">Missouri</div>
+    <div class="stats" id="stats"></div>
     <div class="card" id="repcard">
       <div class="ptop">
         <img class="rphoto" id="rp" src="" alt=""/>
@@ -72,20 +108,25 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background
       </div>
       <div class="coms"><div class="section-label">Committee assignments</div><div id="rc">—</div></div>
     </div>
-    <div class="stats" id="stats"></div>
-    <div class="map-wrap">
-      <div id="map"></div>
-      <div class="map-legend">
+    <div class="map-wrap"><div id="map"></div></div>
+    <div class="below-map">
+      <div class="legend-block">
+        <div class="legend-title">Legend</div>
         <div class="lr"><div class="ld"></div> Edward Jones offices (partial)</div>
         <div class="lr"><div class="lf"></div> Selected district</div>
         <div class="lr"><div class="la"></div> Other districts</div>
         <div class="lr"><div class="lc">City</div> Communities served</div>
       </div>
-    </div>
-    <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.
-      <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames. Office pins show locations mapped in OpenStreetMap (© OpenStreetMap contributors, ODbL) and represent a subset of all offices; stat-card counts are authoritative.</div>
+      <div>
+        <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.</div>
+        <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames. Office pins show locations mapped in OpenStreetMap (© OpenStreetMap contributors, ODbL) and represent a subset of all offices; the counts above are authoritative.</div>
+      </div>
     </div>
   </div>
+</div>
+<div class="app-footer">
+  <div><b>Prototype</b> — internal review only · Powered by ZeisGroup</div>
+  <div>©2025 Edward D. Jones &amp; Co., L.P. All rights reserved. <b>Member SIPC</b> · Data as of 2 Sep 2025</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -95,31 +136,31 @@ body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background
 // Representative and committee data: unitedstates/congress-legislators (public domain).
 const D = {
   '0':{title:'Missouri',
-       stats:[['Edward Jones offices','916','statewide'],['Edward Jones associates','6,501','statewide'],['Edward Jones clients','440,237','statewide']]},
+       stats:[['916','Edward Jones offices'],['6,501','associates'],['440,237','clients']]},
   '1':{title:'Missouri 1st District',
        rep:{name:'Wesley Bell',party:'D',bio:'B001324',coms:['Armed Services','Oversight and Government Reform']},
-       stats:[['Edward Jones offices','113','in district'],['Edward Jones clients','29,026','in district']]},
+       stats:[['113','Edward Jones offices'],['29,026','clients']]},
   '2':{title:'Missouri 2nd District',
        rep:{name:'Ann Wagner',party:'R',bio:'W000812',coms:['Financial Services','Intelligence (Permanent Select)']},
-       stats:[['Edward Jones offices','255','in district'],['Edward Jones clients','84,190','in district']]},
+       stats:[['255','Edward Jones offices'],['84,190','clients']]},
   '3':{title:'Missouri 3rd District',
        rep:{name:'Bob Onder',party:'R',bio:'O000177',coms:['Transportation and Infrastructure','Judiciary','Education and Workforce']},
-       stats:[['Edward Jones offices','125','in district'],['Edward Jones clients','72,749','in district']]},
+       stats:[['125','Edward Jones offices'],['72,749','clients']]},
   '4':{title:'Missouri 4th District',
        rep:{name:'Mark Alford',party:'R',bio:'A000379',coms:['Appropriations','Small Business']},
-       stats:[['Edward Jones offices','85','in district'],['Edward Jones clients','53,476','in district']]},
+       stats:[['85','Edward Jones offices'],['53,476','clients']]},
   '5':{title:'Missouri 5th District',
        rep:{name:'Emanuel Cleaver',party:'D',bio:'C001061',coms:['Financial Services']},
-       stats:[['Edward Jones offices','68','in district'],['Edward Jones clients','31,176','in district']]},
+       stats:[['68','Edward Jones offices'],['31,176','clients']]},
   '6':{title:'Missouri 6th District',
        rep:{name:'Sam Graves',party:'R',bio:'G000546',coms:['Transportation and Infrastructure (Chair)','Armed Services']},
-       stats:[['Edward Jones offices','104','in district'],['Edward Jones clients','62,227','in district']]},
+       stats:[['104','Edward Jones offices'],['62,227','clients']]},
   '7':{title:'Missouri 7th District',
        rep:{name:'Eric Burlison',party:'R',bio:'B001316',coms:['Transportation and Infrastructure','Oversight and Government Reform']},
-       stats:[['Edward Jones offices','86','in district'],['Edward Jones clients','49,088','in district']]},
+       stats:[['86','Edward Jones offices'],['49,088','clients']]},
   '8':{title:'Missouri 8th District',
        rep:{name:'Jason Smith',party:'R',bio:'S001195',coms:['Ways and Means (Chair)','Joint Committee on Taxation (Vice Chair)']},
-       stats:[['Edward Jones offices','80','in district'],['Edward Jones clients','58,305','in district']]}
+       stats:[['80','Edward Jones offices'],['58,305','clients']]}
 };
 
 let lmap=null, cityLayers=[], officeLayers=[], distLayers={}, currentId='0', layoutTimer=null;
@@ -144,9 +185,9 @@ function go(id,el){
 
   document.getElementById('title').textContent=r.title;
 
-  // Stats
-  document.getElementById('stats').innerHTML=r.stats.map(([l,v,s])=>
-    `<div class="stat"><div class="slabel">${l}</div><div class="sval">${v}</div><div class="ssub">${s}</div></div>`).join('');
+  // Stats as right-aligned report lines: bold value, regular label
+  document.getElementById('stats').innerHTML=r.stats.map(([v,l])=>
+    `<div class="stat-line"><b>${v}</b> ${l}</div>`).join('');
 
   // Representative card (districts only)
   const card=document.getElementById('repcard');
