@@ -112,14 +112,14 @@ body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface)
     <div class="below-map">
       <div class="legend-block">
         <div class="legend-title">Legend</div>
-        <div class="lr"><div class="ld"></div> Edward Jones offices (partial)</div>
+        <div class="lr"><div class="ld"></div> Edward Jones offices</div>
         <div class="lr"><div class="lf"></div> Selected district</div>
         <div class="lr"><div class="la"></div> Other districts</div>
         <div class="lr"><div class="lc">City</div> Communities served</div>
       </div>
       <div>
         <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.</div>
-        <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames. Office pins show locations mapped in OpenStreetMap (© OpenStreetMap contributors, ODbL) and represent a subset of all offices; the counts above are authoritative.</div>
+        <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. Office pins: Edward Jones branch location dataset (745 Missouri locations; multiple offices may share a location). District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames.</div>
       </div>
     </div>
   </div>
@@ -223,7 +223,7 @@ function go(id,el){
   officeLayers.forEach(m=>m.remove()); officeLayers=[];
   const officeSets = id==='0' ? Object.values(MO_DATA.offices||{}) : [(MO_DATA.offices||{})[id]||[]];
   officeSets.forEach(set=>set.forEach(([lat,lng])=>{
-    const m=L.circleMarker([lat,lng],{radius:5,fillColor:'#FFD520',color:'#D8A800',weight:1.5,opacity:1,fillOpacity:0.95})
+    const m=L.circleMarker([lat,lng],{radius:id==='0'?3:4.5,fillColor:'#FFD520',color:'#D8A800',weight:1,opacity:1,fillOpacity:0.95})
       .bindTooltip('Edward Jones office',{permanent:false,direction:'top'}).addTo(lmap);
     officeLayers.push(m);
   }));
@@ -273,7 +273,7 @@ function renderCityLabels(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   buildTabs();
-  lmap=L.map('map',{zoomControl:true,scrollWheelZoom:false});
+  lmap=L.map('map',{zoomControl:true,scrollWheelZoom:false,preferCanvas:true});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:14}).addTo(lmap);
   MO_DATA.geo.features.forEach(f=>{
     distLayers[String(f.properties.d)]=L.geoJSON(f).addTo(lmap);
