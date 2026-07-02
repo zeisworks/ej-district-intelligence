@@ -7,18 +7,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Zilla+Slab:wght@600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Zilla+Slab:wght@600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--ej-yellow:#FFD520;--ej-gray:#414042;--ej-gray-dark:#2F2F31;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--surface:#fff;}
-body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface);color:var(--ej-gray);}
+body{font-family:Inter,Arial,Helvetica,sans-serif;background:var(--surface);color:var(--ej-gray);}
 
 /* Header band, mirroring Edward Jones print/web masthead */
 .app-header{background:var(--ej-gray);display:flex;align-items:stretch;justify-content:space-between;height:56px;}
 .logo-area{display:flex;align-items:stretch;gap:14px;}
 .ej-logo{background:var(--ej-yellow);padding:0 18px;display:flex;align-items:center;white-space:nowrap;}
 .lg-serif{font-family:'Zilla Slab',Georgia,serif;font-weight:600;font-size:19px;color:#1d1d1f;}
-.lg-sans{font-family:Montserrat,Arial,sans-serif;font-weight:800;font-size:19px;color:#1d1d1f;margin-left:4px;}
+.lg-sans{font-family:Inter,Arial,sans-serif;font-weight:800;font-size:19px;color:#1d1d1f;margin-left:4px;}
 .lg-reg{font-size:8px;color:#1d1d1f;vertical-align:super;}
 .header-title-wrap{display:flex;flex-direction:column;justify-content:center;}
 .header-title{color:#fff;font-size:13px;font-weight:700;letter-spacing:.01em;}
@@ -28,7 +28,7 @@ body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface)
 .header-right .sipc{font-weight:400;color:rgba(255,255,255,.75);}
 .header-right .sep{margin:0 7px;color:rgba(255,255,255,.4);font-weight:400;}
 
-/* Nav: white bar, dark labels, yellow active underline like edwardjones.com */
+/* Nav: white bar, dark labels, yellow active underline */
 .tabs-bar{background:#fff;padding:0 1.5rem;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);}
 .tab{padding:13px 12px 10px;font-size:13px;font-weight:600;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .12s;white-space:nowrap;}
 .tab:hover{color:var(--ej-gray-dark);}
@@ -40,7 +40,7 @@ body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface)
 /* Page title + right-aligned stats, as on the district report pages */
 .pg-title{font-size:34px;font-weight:700;color:var(--ej-gray-dark);padding-bottom:10px;border-bottom:1px solid var(--ej-gray);letter-spacing:-.01em;}
 .stats{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
-.stat-line{font-size:15px;color:var(--ej-gray);}
+.stat-line{font-size:15px;font-weight:300;color:var(--ej-gray);}
 .stat-line b{font-weight:800;color:var(--ej-gray-dark);}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;}
@@ -48,38 +48,69 @@ body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface)
 .rphoto{width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--ej-yellow);}
 .rini{width:52px;height:52px;border-radius:50%;background:var(--ej-gray);border:3px solid var(--ej-yellow);display:none;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--ej-yellow);flex-shrink:0;}
 .rname{font-size:16px;font-weight:700;color:var(--ej-gray-dark);margin-bottom:2px;line-height:1.3;}
-.rmeta{font-size:12px;color:var(--muted);line-height:1.5;}
+.rmeta{font-size:12px;color:var(--muted);line-height:1.5;font-weight:300;}
 .pbadge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;vertical-align:middle;margin-left:6px;}
 .bD{background:#dbeafe;color:#1e40af;}.bR{background:#fee2e2;color:#b91c1c;}
 .coms{border-top:1px solid var(--border);padding-top:10px;}
 .section-label{font-size:10px;color:var(--ej-gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;}
 .pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;background:#fff;border:1.5px solid var(--ej-yellow);border-radius:3px;margin:2px 3px 0 0;color:var(--ej-gray-dark);}
 
+.map-tools{display:flex;justify-content:flex-end;margin-bottom:-6px;}
+.ghost-btn{font-family:inherit;font-size:11px;font-weight:600;color:var(--ej-gray);background:#fff;border:1px solid var(--border);border-radius:4px;padding:4px 10px;cursor:pointer;}
+.ghost-btn:hover{border-color:var(--ej-gray);}
+.ghost-btn.on{background:var(--ej-yellow);border-color:#D8A800;color:#1d1d1f;}
 .map-wrap{position:relative;}
 #map{height:470px;border-radius:6px;border:1px solid var(--border);overflow:hidden;}
+body.print-mode #map{background:#fff;}
+body.print-mode .leaflet-control-zoom,body.print-mode .leaflet-control-attribution{display:none;}
+.inset{position:absolute;top:10px;right:10px;z-index:1000;background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:4px;padding:5px;line-height:0;}
 
 /* Legend + boilerplate row, like the bottom of the report pages */
 .below-map{display:flex;gap:2rem;align-items:flex-start;padding:4px 2px 0;}
 .legend-block{flex-shrink:0;}
 .legend-title{font-size:13px;font-weight:700;color:var(--ej-gray-dark);margin-bottom:6px;}
-.lr{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ej-gray);line-height:2;}
+.lr{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:300;color:var(--ej-gray);line-height:2;}
 .ld{width:12px;height:12px;border-radius:50%;background:var(--ej-yellow);border:1px solid #D8A800;flex-shrink:0;}
 .lf{width:16px;height:11px;border-radius:2px;background:rgba(255,213,32,.25);border:2px solid var(--ej-gray);flex-shrink:0;}
 .la{width:16px;height:11px;border-radius:2px;background:transparent;border:1.5px dashed #999;flex-shrink:0;}
 .lc{padding:0 5px;border-radius:2px;background:#6b6b6b;color:#fff;font-size:9px;flex-shrink:0;}
-.about-note{font-size:12.5px;color:var(--ej-gray);line-height:1.65;}
-.mnote{font-size:10px;color:var(--faint);margin-top:10px;line-height:1.6;}
+.lstar{color:#5A9BD5;font-size:13px;flex-shrink:0;width:16px;text-align:center;}
+.about-note{font-size:12.5px;font-weight:300;color:var(--ej-gray);line-height:1.65;}
+.mnote{font-size:10px;color:var(--faint);margin-top:10px;line-height:1.6;font-weight:300;}
 
-/* Compliance footer band */
+/* About Edward Jones page, mirroring page 2 of the district reports */
+.about-page{display:none;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.2rem;align-items:start;}
+.ab-lede{font-size:15px;font-weight:300;line-height:1.7;color:var(--ej-gray);margin-bottom:1.1rem;}
+.ab-stats{list-style:none;margin-bottom:1.3rem;}
+.ab-stats li{font-size:13px;font-weight:300;line-height:1.55;color:var(--ej-gray);padding:7px 0;border-bottom:1px solid var(--border);}
+.ab-stats b{font-weight:800;color:var(--ej-gray-dark);}
+.purpose-box{background:rgba(255,213,32,.16);border-radius:6px;padding:1.1rem 1.2rem;}
+.ab-h{font-size:15px;font-weight:700;color:var(--ej-gray-dark);margin-bottom:8px;}
+.purpose-box p,.impact p{font-size:12.5px;font-weight:300;line-height:1.65;color:var(--ej-gray);}
+.purpose-box p+p{margin-top:8px;}
+.impact{margin-bottom:1.2rem;}
+.impact .ab-h{margin-bottom:5px;}
+.impact-fig{margin-top:7px;padding-left:12px;border-left:3px solid var(--ej-yellow);font-size:12.5px;font-weight:300;line-height:1.6;color:var(--ej-gray);}
+.impact-fig b{font-weight:800;color:var(--ej-gray-dark);}
+.ab-src{font-size:10px;color:var(--faint);font-weight:300;margin-top:.5rem;}
+
+/* Compliance footer band, mirroring the report footer line */
 .app-footer{margin-top:1.5rem;background:var(--ej-gray);color:rgba(255,255,255,.75);font-size:10px;display:flex;justify-content:space-between;gap:1rem;padding:10px 1.5rem;letter-spacing:.02em;}
 .app-footer b{color:#fff;font-weight:700;}
 
-.city-chip{position:absolute;transform:translate(-50%,-50%);background:#6b6b6b;color:#fff;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;white-space:nowrap;font-family:Montserrat,Arial,sans-serif;}
+.city-chip{position:absolute;transform:translate(-50%,-50%);background:#6b6b6b;color:#fff;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.25);opacity:.92;white-space:nowrap;font-family:Inter,Arial,sans-serif;}
+.cluster-bubble{position:absolute;transform:translate(-50%,-50%);background:var(--ej-yellow);border:1px solid #D8A800;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;font-weight:700;color:#1d1d1f;box-shadow:0 1px 2px rgba(0,0,0,.2);}
 
 @media (max-width:640px){
   .pg-title{font-size:26px;}
-  .below-map{flex-direction:column;gap:1rem;}
+  .below-map,.about-grid{flex-direction:column;grid-template-columns:1fr;gap:1rem;}
   .header-right{display:none;}
+}
+@media print{
+  .tabs-bar,.map-tools,.leaflet-control-zoom,.header-right{display:none!important;}
+  #map{border:none;}
+  .app-footer{margin-top:.5rem;}
 }
 </style>
 </head>
@@ -108,25 +139,68 @@ body{font-family:Montserrat,Arial,Helvetica,sans-serif;background:var(--surface)
       </div>
       <div class="coms"><div class="section-label">Committee assignments</div><div id="rc">—</div></div>
     </div>
-    <div class="map-wrap"><div id="map"></div></div>
-    <div class="below-map">
+    <div class="map-tools" id="maptools"><button class="ghost-btn" id="printbtn" title="Hide the basemap for a print-style view">Print view</button></div>
+    <div class="map-wrap" id="mapwrap">
+      <div id="map"></div>
+      <div class="inset" id="inset"></div>
+    </div>
+    <div class="below-map" id="belowmap">
       <div class="legend-block">
         <div class="legend-title">Legend</div>
         <div class="lr"><div class="ld"></div> Edward Jones offices</div>
         <div class="lr"><div class="lf"></div> Selected district</div>
-        <div class="lr"><div class="la"></div> Other districts</div>
+        <div class="lr" id="lg-other"><div class="la"></div> Other districts</div>
         <div class="lr"><div class="lc">City</div> Communities served</div>
+        <div class="lr" id="lg-cap"><span class="lstar">★</span> State capital</div>
       </div>
       <div>
         <div class="about-note">Edward Jones has more than 50,000 associates across North America. Each Edward Jones office includes a team of two or more members who serve our clients and communities every day. They are backed by professionals in our St. Louis, MO; Tempe, AZ; and Mississauga, Canada, home office locations.</div>
-        <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. Office pins: Edward Jones branch location dataset (745 Missouri locations; multiple offices may share a location). District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames.</div>
+        <div class="mnote">Office and client counts: Edward Jones district reports (REP-3979T-A-E-OP), as of 2 Sep 2025. Office pins: Edward Jones branch location dataset (745 Missouri locations; multiple offices may share a location). Statewide cluster counts are derived from branch locations by proximity. District boundaries: U.S. Census Bureau, 119th Congress. City locations: GeoNames.</div>
+      </div>
+    </div>
+
+    <div class="about-page" id="aboutpage">
+      <div class="about-grid">
+        <div>
+          <p class="ab-lede">For more than 100 years, Edward Jones has worked to create a better future for our clients, their families and the communities we serve — one relationship at a time.</p>
+          <ul class="ab-stats">
+            <li><b>Nearly 15,000</b> locations in North America, with presence in 68% of U.S. counties</li>
+            <li><b>55,000+</b> associates employed</li>
+            <li><b>20,000+</b> of those are financial advisors</li>
+            <li><b>9 million+</b> Edward Jones clients</li>
+            <li><b>263,000+</b> workplace retirement plans served, with over <b>1.3 million</b> plan participants</li>
+          </ul>
+          <div class="purpose-box">
+            <div class="ab-h">Our purpose</div>
+            <p>At Edward Jones, we are fueled by our purpose — to partner for positive impact, to improve the lives of our clients and colleagues, and better our communities and society. This purpose informs our actions and decisions. It's present in the work our branch teams do each day, building deep, personal relationships with our clients and delivering comprehensive financial planning and advice.</p>
+            <p>As a firm that seeks to make a positive difference in the world, we address some of the most pressing challenges of our time. We call these our Purpose Impact Areas: partnering for lasting financial strength, promoting healthier futures and advancing inclusive growth.</p>
+          </div>
+        </div>
+        <div>
+          <div class="impact">
+            <div class="ab-h">Partnering for lasting financial strength</div>
+            <p>We believe in the power of financial knowledge and confidence and a personal, needs-based approach to build long-lasting financial strength.</p>
+            <div class="impact-fig">In 2025, <b>$6.5 million</b> awarded to students for higher education and <b>$2.9 million</b> to small businesses.</div>
+          </div>
+          <div class="impact">
+            <div class="ab-h">Promoting healthier futures</div>
+            <p>We activate our purpose to support the financial, physical and emotional well-being of those impacted by health issues.</p>
+            <div class="impact-fig">Since 2016, over <b>$58 million</b> raised for the Alzheimer's Association, with <b>134,000+</b> participants in the Walk to End Alzheimer's.</div>
+          </div>
+          <div class="impact">
+            <div class="ab-h">Advancing inclusive growth</div>
+            <p>We invest to lift all people and communities, including the underserved, by equipping more people to fully participate in the economy.</p>
+            <div class="impact-fig">Edward Jones supported nearly <b>161,000</b> community jobs in the U.S., translating into <b>$21.5 billion</b> of labor income — together contributing <b>$29.5 billion</b> to the U.S. GDP.*</div>
+          </div>
+          <div class="ab-src">*Source: Edward Jones, Purpose, Inclusion, &amp; Citizenship Report: Finding Fulfillment, 3/17/2026.</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div class="app-footer">
   <div><b>Prototype</b> — internal review only · Powered by ZeisGroup</div>
-  <div>©2025 Edward D. Jones &amp; Co., L.P. All rights reserved. <b>Member SIPC</b> · Data as of 2 Sep 2025</div>
+  <div>REP-3979T-A-E-OP · EXP 31 DEC 2026 · ©2025 Edward D. Jones &amp; Co., L.P. All rights reserved. AECSPAD · <b>Member SIPC</b> · As of 2 Sep 2025</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -163,7 +237,7 @@ const D = {
        stats:[['80','Edward Jones offices'],['58,305','clients']]}
 };
 
-let lmap=null, cityLayers=[], officeLayers=[], distLayers={}, currentId='0', layoutTimer=null;
+let lmap=null, tileLayer=null, cityLayers=[], officeLayers=[], distLayers={}, currentId='0', layoutTimer=null;
 function ini(n){return n.split(' ').filter(Boolean).map(x=>x[0]).join('').substring(0,2).toUpperCase();}
 
 function buildTabs(){
@@ -176,13 +250,44 @@ function buildTabs(){
   };
   mk('0','Missouri').classList.add('active');
   for(let n=1;n<=8;n++) mk(String(n),`MO-${n} ${D[String(n)].rep.name.split(' ').pop()}`);
+  mk('about','About Edward Jones');
+}
+
+// Small state-outline inset showing where the selected district sits
+function renderInset(id){
+  const el=document.getElementById('inset');
+  if(id==='0'){el.style.display='none';return;}
+  el.style.display='block';
+  const feats=MO_DATA.geo.features;
+  let mnLa=99,mxLa=-99,mnLo=999,mxLo=-999;
+  const eachRing=(g,cb)=>{(g.type==='Polygon'?[g.coordinates]:g.coordinates).forEach(p=>cb(p[0]));};
+  feats.forEach(f=>eachRing(f.geometry,r=>r.forEach(([lo,la])=>{
+    if(la<mnLa)mnLa=la; if(la>mxLa)mxLa=la; if(lo<mnLo)mnLo=lo; if(lo>mxLo)mxLo=lo;})));
+  const kx=Math.cos((mnLa+mxLa)/2*Math.PI/180);
+  const W=92, H=W*((mxLa-mnLa)/((mxLo-mnLo)*kx));
+  const px=lo=>( (lo-mnLo)/(mxLo-mnLo)*W ).toFixed(1);
+  const py=la=>( (mxLa-la)/(mxLa-mnLa)*H ).toFixed(1);
+  let svg=`<svg width="${W}" height="${H.toFixed(0)}" viewBox="0 0 ${W} ${H.toFixed(0)}" xmlns="http://www.w3.org/2000/svg">`;
+  const path=f=>{let d='';eachRing(f.geometry,r=>{d+='M'+r.map(([lo,la])=>px(lo)+' '+py(la)).join('L')+'Z';});return d;};
+  feats.forEach(f=>{
+    const sel=String(f.properties.d)===id;
+    svg+=`<path d="${path(f)}" fill="${sel?'#FFD520':'#fff'}" stroke="#414042" stroke-width="${sel?0.9:0.5}"/>`;
+  });
+  el.innerHTML=svg+'</svg>';
 }
 
 function go(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
+  const isAbout=id==='about';
+  document.getElementById('aboutpage').style.display=isAbout?'block':'none';
+  ['stats','repcard','maptools','mapwrap','belowmap'].forEach(x=>
+    document.getElementById(x).style.display=isAbout?'none':'');
+  if(isAbout){
+    document.getElementById('title').textContent='About Edward Jones';
+    return;
+  }
   const r=D[id];
-
   document.getElementById('title').textContent=r.title;
 
   // Stats as right-aligned report lines: bold value, regular label
@@ -204,7 +309,13 @@ function go(id,el){
     card.style.display='none';
   }
 
+  // Legend rows that only apply to one of the views
+  document.getElementById('lg-cap').style.display=id==='0'?'flex':'none';
+  document.getElementById('lg-other').style.display=id==='0'?'none':'flex';
+  renderInset(id);
+
   // District styling
+  lmap.invalidateSize();
   let bounds=null;
   Object.entries(distLayers).forEach(([d,l])=>{
     const isSel = id!=='0' && d===id;
@@ -219,20 +330,48 @@ function go(id,el){
   });
   lmap.fitBounds(bounds.pad(0.06));
 
-  // Office pins: selected district's offices, or all statewide on the state view
-  officeLayers.forEach(m=>m.remove()); officeLayers=[];
-  const officeSets = id==='0' ? Object.values(MO_DATA.offices||{}) : [(MO_DATA.offices||{})[id]||[]];
-  officeSets.forEach(set=>set.forEach(([lat,lng])=>{
-    const m=L.circleMarker([lat,lng],{radius:id==='0'?3:4.5,fillColor:'#FFD520',color:'#D8A800',weight:1,opacity:1,fillOpacity:0.95})
-      .bindTooltip('Edward Jones office',{permanent:false,direction:'top'}).addTo(lmap);
-    officeLayers.push(m);
-  }));
-
-  // City labels are laid out in pixel space, so wait for the view change to settle
+  // Overlays are laid out in pixel space, so wait for the view change to settle
   currentId=id;
   clearTimeout(layoutTimer);
-  lmap.once('moveend',renderCityLabels);
-  layoutTimer=setTimeout(renderCityLabels,400);
+  lmap.once('moveend',renderOverlays);
+  layoutTimer=setTimeout(renderOverlays,400);
+}
+
+function renderOverlays(){ renderOffices(); renderCityLabels(); }
+
+// District views: one dot per branch location. State view: proximity
+// clusters with counts, like the numbered bubbles on the state report map.
+function renderOffices(){
+  officeLayers.forEach(m=>m.remove()); officeLayers=[];
+  if(!lmap||currentId==='about') return;
+  if(currentId!=='0'){
+    ((MO_DATA.offices||{})[currentId]||[]).forEach(([lat,lng])=>{
+      officeLayers.push(L.circleMarker([lat,lng],{radius:4.5,fillColor:'#FFD520',color:'#D8A800',weight:1,opacity:1,fillOpacity:0.95})
+        .bindTooltip('Edward Jones office',{permanent:false,direction:'top'}).addTo(lmap));
+    });
+    return;
+  }
+  // Grid-cluster all statewide points at the current zoom
+  const CELL=44;
+  const cells={};
+  Object.values(MO_DATA.offices||{}).flat().forEach(([lat,lng])=>{
+    const p=lmap.latLngToContainerPoint([lat,lng]);
+    const k=Math.floor(p.x/CELL)+','+Math.floor(p.y/CELL);
+    (cells[k]=cells[k]||{n:0,x:0,y:0}).n++; cells[k].x+=p.x; cells[k].y+=p.y;
+  });
+  Object.values(cells).forEach(c=>{
+    const ll=lmap.containerPointToLatLng([c.x/c.n,c.y/c.n]);
+    if(c.n===1){
+      officeLayers.push(L.circleMarker(ll,{radius:3.5,fillColor:'#FFD520',color:'#D8A800',weight:1,opacity:1,fillOpacity:0.95})
+        .bindTooltip('Edward Jones office',{permanent:false,direction:'top'}).addTo(lmap));
+    } else {
+      const dia=Math.min(48,Math.round(16+6*Math.log2(c.n)));
+      const fs=c.n>=100?12:11;
+      officeLayers.push(L.marker(ll,{interactive:false,keyboard:false,
+        icon:L.divIcon({className:'',iconSize:[0,0],
+          html:`<div class="cluster-bubble" style="width:${dia}px;height:${dia}px;font-size:${fs}px">${c.n}</div>`})}).addTo(lmap));
+    }
+  });
 }
 
 // Place each city label near its anchor, nudging outward until it overlaps
@@ -274,11 +413,16 @@ function renderCityLabels(){
 document.addEventListener('DOMContentLoaded',()=>{
   buildTabs();
   lmap=L.map('map',{zoomControl:true,scrollWheelZoom:false,preferCanvas:true});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:14}).addTo(lmap);
+  tileLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:14}).addTo(lmap);
   MO_DATA.geo.features.forEach(f=>{
     distLayers[String(f.properties.d)]=L.geoJSON(f).addTo(lmap);
   });
-  lmap.on('zoomend',renderCityLabels);
+  lmap.on('zoomend',renderOverlays);
+  document.getElementById('printbtn').onclick=function(){
+    const on=document.body.classList.toggle('print-mode');
+    this.classList.toggle('on',on);
+    if(on) lmap.removeLayer(tileLayer); else tileLayer.addTo(lmap);
+  };
   go('0',document.querySelector('.tab'));
 });
 </script>
